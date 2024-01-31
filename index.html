@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+
+      #main_img {
+        position: relative;
+        width: 100%;
+        height: 575px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        filter: drop-shadow(black 0px 0px 10px);
+        z-index: 5;
+      }
+
+      .section_2 {
+        display: flex;
+        overflow-x: scroll;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+      }
+
+      .section_2::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+      }
+
+      .section_2 img {
+        width: 100px; /* Adjust the width of the bottom images */
+        margin-right: 10px; /* Adjust the margin between bottom images */
+        cursor: pointer;
+        border: 5px solid black;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+      }
+
+      .section_2 img.selected {
+        border: 2px solid black;
+        opacity: 1;
+      }
+
+      #left_btn,
+      #right_btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        outline: none;
+      }
+
+      #left_btn {
+        left: 10px;
+      }
+
+      #right_btn {
+        right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main_img"></div>
+
+    <div class="section_2"></div>
+
+    <button id="left_btn" onclick="prevImg()">❮</button>
+    <button id="right_btn" onclick="nextImg()">❯</button>
+
+    <script>
+      let count = 0;
+      let mainImg = document.getElementById("main_img");
+      let downImgs;
+
+      let Images = [
+        "https://cdn.pixabay.com/photo/2024/01/28/10/47/lake-8537338_1280.jpg",
+        "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_640.jpg",
+        "https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_640.jpg",
+        "https://cdn.pixabay.com/photo/2017/02/01/22/02/mountain-landscape-2031539_640.jpg",
+        "https://cdn.pixabay.com/photo/2024/01/26/08/35/grand-ark-8533646_640.jpg",
+        "https://cdn.pixabay.com/photo/2017/02/09/09/11/starry-sky-2051448_640.jpg",
+        "https://cdn.pixabay.com/photo/2016/10/18/21/22/beach-1751455_640.jpg",
+        "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_640.jpg",
+        "https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782_640.jpg",
+        "https://cdn.pixabay.com/photo/2015/10/12/15/46/animal-984573_640.jpg",
+        "https://cdn.pixabay.com/photo/2024/01/28/10/47/lake-8537338_1280.jpg",
+        "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072823_640.jpg",
+        "https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_640.jpg",
+        "https://cdn.pixabay.com/photo/2017/02/01/22/02/mountain-landscape-2031539_640.jpg",
+        "https://cdn.pixabay.com/photo/2024/01/26/08/35/grand-ark-8533646_640.jpg",
+        "https://cdn.pixabay.com/photo/2017/02/09/09/11/starry-sky-2051448_640.jpg",
+        "https://cdn.pixabay.com/photo/2016/10/18/21/22/beach-1751455_640.jpg",
+        "https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492_640.jpg",
+        "https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782_640.jpg",
+        "https://cdn.pixabay.com/photo/2015/10/12/15/46/animal-984573_640.jpg",
+        // Your image URLs
+      ];
+
+      let bottomImagesContainer = document.querySelector(".section_2");
+
+      Images.forEach((url, index) => {
+        let image = document.createElement("img");
+        image.src = url;
+        image.dataset.index = index;
+        image.addEventListener("click", (e) => handleImageClick(e));
+        bottomImagesContainer.appendChild(image);
+      });
+
+      var left_btn = document.getElementById("left_btn");
+      var right_btn = document.getElementById("right_btn");
+
+      slideshow(count);
+
+      function handleImageClick(event) {
+        count = parseInt(event.target.dataset.index);
+        slideshow(count);
+      }
+
+      function nextImg() {
+        count = (count + 1) % Images.length;
+        slideshow(count);
+      }
+
+      function prevImg() {
+        count = (count - 1 + Images.length) % Images.length;
+        slideshow(count);
+      }
+
+      function slideshow(count) {
+        downImgs = document.querySelectorAll(".section_2 img");
+
+        downImgs.forEach((img, index) => {
+          img.classList.remove("selected");
+          if (index === count) {
+            img.classList.add("selected");
+          }
+        });
+
+        mainImg.style.background = `url(${Images[count]})`;
+        right_btn.style.background = `url(${
+          Images[(count + 1) % Images.length]
+        })`;
+        left_btn.style.background = `url(${
+          Images[(count - 1 + Images.length) % Images.length]
+        })`;
+      }
+    </script>
+  </body>
+</html>
